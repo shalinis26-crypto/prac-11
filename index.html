@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindBloom - Session Booking &amp; Validation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f7f4;
+            color: #2c3e35;
+            margin: 0;
+            padding: 35px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .card {
+            background: #ffffff;
+            width: 100%;
+            max-width: 440px;
+            padding: 25px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 14px rgba(46, 111, 86, 0.1);
+            border-top: 5px solid #3b8266;
+        }
+        h2 {
+            margin: 0 0 4px;
+            color: #2e6f56;
+        }
+        .subtitle {
+            margin: 0 0 20px;
+            font-size: 14px;
+            color: #5c766b;
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1.5px solid #cbd8d2;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        input.error-border {
+            border-color: #d93025;
+        }
+        .error-msg {
+            color: #d93025;
+            font-size: 12.5px;
+            margin-top: 5px;
+            min-height: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 11px;
+            background-color: #3b8266;
+            color: #ffffff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #2d664f;
+        }
+        #resultArea {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 6px;
+            background-color: #eaf3ee;
+            color: #2e6f56;
+            font-weight: 600;
+            text-align: center;
+            min-height: 22px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>MindBloom</h2>
+        <p class="subtitle">Mental Health Counseling &amp; Therapy Fee Calculator</p>
+<form id="sessionForm" action="#" onsubmit="return false;">
+            <div class="form-group">
+                <label for="sessionsInput">Number of Therapy Sessions:</label>
+                <input type="text" id="sessionsInput" placeholder="e.g. 5">
+                <div id="sessionsError" class="error-msg"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="feeInput">Fee per Session (Rs.):</label>
+                <input type="text" id="feeInput" placeholder="e.g. 120">
+                <div id="feeError" class="error-msg"></div>
+            </div>
+
+            <button type="button" id="submitBtn" onclick="validateForm()">Submit</button>
+        </form>
+
+        <p id="resultArea"></p>
+    </div>
+
+    <script>
+        function validateForm() {
+            const sessionsEl = document.querySelector("#sessionsInput");
+            const feeEl = document.querySelector("#feeInput");
+            const sessionsErr = document.querySelector("#sessionsError");
+            const feeErr = document.querySelector("#feeError");
+            const resultArea = document.querySelector("#resultArea");
+
+            const sessionsVal = sessionsEl.value.trim();
+            const feeVal = feeEl.value.trim();
+            const numPattern = /^\d+$/;
+
+            sessionsErr.textContent = "";
+            feeErr.textContent = "";
+            sessionsEl.classList.remove("error-border");
+            feeEl.classList.remove("error-border");
+            resultArea.textContent = "";
+
+            let isValid = true;
+
+            if (sessionsVal === "") {
+                sessionsErr.textContent = "Number of sessions cannot be empty";
+                sessionsEl.classList.add("error-border");
+                isValid = false;
+            } else if (!numPattern.test(sessionsVal)) {
+                sessionsErr.textContent = "Only numbers are allowed";
+                sessionsEl.classList.add("error-border");
+                isValid = false;
+            }
+
+            if (feeVal === "") {
+                feeErr.textContent = "Fee per session cannot be empty";
+                feeEl.classList.add("error-border");
+                isValid = false;
+            } else if (!numPattern.test(feeVal)) {
+                feeErr.textContent = "Only numbers are allowed";
+                feeEl.classList.add("error-border");
+                isValid = false;
+            }
+
+            if (isValid) {
+                displayBill(Number(sessionsVal), Number(feeVal));
+            }
+        }
+
+        function displayBill(sessions, fee) {
+            const total = sessions * fee;
+            const resultArea = document.querySelector("#resultArea");
+            resultArea.textContent = "Total Bill: Rs. " + total.toFixed(2);
+        }
+    </script>
+
+</body>
+</html>
